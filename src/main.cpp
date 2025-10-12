@@ -220,7 +220,7 @@ void loop() {
   delay(0);
   esc.writeMicroseconds(1500);
   delay(5000);
-// test
+
 
 }
 
