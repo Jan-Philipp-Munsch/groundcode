@@ -221,6 +221,5 @@ void loop() {
   esc.writeMicroseconds(1500);
   delay(5000);
 
-  //test
 }
 
