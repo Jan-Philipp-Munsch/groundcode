@@ -141,38 +141,27 @@ void loop() {
 }
 
 */
-/*
-// HC 12 test
 
-#include <SoftwareSerial.h>
+// HC-12 Sender (Nano, AVR)
+// Verdrahtung: D11 -> HC-12 RX (über Teiler!), D10 <- HC-12 TX, GND gemeinsam
 #include <Arduino.h>
+#include <SoftwareSerial.h>
+SoftwareSerial hc12(10, 11); // RX, TX (D10 liest von HC-TX, D11 sendet zu HC-RX)
 
-SoftwareSerial hc12(10,11);
 void setup() {
   Serial.begin(9600);
   hc12.begin(9600);
-  //Serial.println("Let's start!");
+  Serial.println(F("HC-12 Sender startet"));
 }
-void loop() { 
-  
-  if (hc12.available()) {
-    Serial.write(hc12.read());
-    digitalWrite(13, HIGH);  
-  }
-  else{
-    delay(100);
-    digitalWrite(13, LOW);
-  }
-    
-  hc12.println("AT+P8 "); // Beispiel: maximale Sendeleistung
-  delay(500);
 
-  while (hc12.available()) {
-    Serial.write(hc12.read()); // Antwort des HC-12 anzeigen
-  }
-
+void loop() {
+  static unsigned long n = 0;
+  hc12.print(F("Hello #"));
+  hc12.println(n++);
+  delay(1000);
 }
-*/
+
+
 
 /*
 // camera test
@@ -196,7 +185,7 @@ void loop() {
 }
 
 */
-
+/*
 // Test Fan ESC mit Arduino Nano
 //pwm 2100
 #include <Arduino.h>
@@ -223,4 +212,4 @@ void loop() {
 
 
 }
-
+*/
