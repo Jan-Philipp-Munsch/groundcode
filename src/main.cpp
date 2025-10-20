@@ -142,23 +142,80 @@ void loop() {
 
 */
 
-// HC-12 Sender (Nano, AVR)
-// Verdrahtung: D11 -> HC-12 RX (über Teiler!), D10 <- HC-12 TX, GND gemeinsam
+// HC-12 Empfänger (Nano, AVR) — kompatibel zu deinem "Hello #<n>"-Sender
+// D10 <- HC-12 TX  |  D11 -> HC-12 RX (RX von HC-12 über Spannungsteiler!)
+// USB-Serial bleibt frei für Monitor.
+
 #include <Arduino.h>
 #include <SoftwareSerial.h>
-SoftwareSerial hc12(10, 11); // RX, TX (D10 liest von HC-TX, D11 sendet zu HC-RX)
+
+// SoftwareSerial(RX, TX)
+SoftwareSerial hc12(10, 11); // D10 liest von HC-TX, D11 sendet zu HC-RX
+
+const uint32_t HC12_BAUD = 9600;
+
+// Zeilenpuffer
+char lineBuf[64];
+size_t lineLen = 0;
 
 void setup() {
-  Serial.begin(9600);
-  hc12.begin(9600);
-  Serial.println(F("HC-12 Sender startet"));
+  Serial.begin(9600);       // dein Monitor lief mit 9600
+  hc12.begin(HC12_BAUD);
+
+  Serial.println(F("\n[RX] HC-12 Empfaenger bereit (Hello-Detector)"));
+  Serial.println(F("[RX] Erwartet: \"Hello #<n>\"   (optional: BEACON,<seq>,<ms>)"));
+}
+
+static void processLine(const char* s) {
+  // 1) Dein Format: "Hello #<n>"
+  if (strncmp(s, "Hello #", 7) == 0) {
+    long n = atol(s + 7);
+    Serial.print(F("[RX] Hello empfangen, n="));
+    Serial.println(n);
+    return;
+  }
+
+  // 2) Optional: mein früheres Beacon-Format "BEACON,<seq>,<ms>"
+  if (strncmp(s, "BEACON,", 7) == 0) {
+    // simple parse
+    char buf[64];
+    strncpy(buf, s, sizeof(buf));
+    buf[sizeof(buf)-1] = 0;
+
+    char* p = buf + 7;
+    char* tok1 = strtok(p, ",");   // seq
+    char* tok2 = strtok(nullptr, ","); // ms
+    long seq = tok1 ? atol(tok1) : -1;
+    long ms  = tok2 ? atol(tok2) : -1;
+
+    Serial.print(F("[RX] Beacon OK"));
+    if (seq >= 0) { Serial.print(F("  seq=")); Serial.print(seq); }
+    if (ms  >= 0) { Serial.print(F("  t_ms=")); Serial.print(ms); }
+    Serial.println();
+    return;
+  }
+
+  // Sonst ignorieren (kein Treffer)
 }
 
 void loop() {
-  static unsigned long n = 0;
-  hc12.print(F("Hello #"));
-  hc12.println(n++);
-  delay(1000);
+  while (hc12.available()) {
+    char c = (char)hc12.read();
+    if (c == '\n' || c == '\r') {
+      if (lineLen > 0) {
+        lineBuf[lineLen] = '\0';
+        processLine(lineBuf);
+        lineLen = 0; // reset
+      }
+    } else {
+      if (lineLen < sizeof(lineBuf) - 1) {
+        lineBuf[lineLen++] = c;
+      } else {
+        // Überlauf -> verwerfen
+        lineLen = 0;
+      }
+    }
+  }
 }
 
 
