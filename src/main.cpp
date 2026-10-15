@@ -145,7 +145,7 @@ void loop() {
 // HC-12 Empfänger (Nano, AVR) — kompatibel zu deinem "Hello #<n>"-Sender
 // D10 <- HC-12 TX  |  D11 -> HC-12 RX (RX von HC-12 über Spannungsteiler!)
 // USB-Serial bleibt frei für Monitor.
-
+/*
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 
@@ -217,7 +217,7 @@ void loop() {
     }
   }
 }
-
+*/
 
 
 /*
@@ -242,7 +242,7 @@ void loop() {
 }
 
 */
-/*
+
 // Test Fan ESC mit Arduino Nano
 //pwm 2100
 #include <Arduino.h>
@@ -269,4 +269,4 @@ void loop() {
 
 
 }
-*/
+
