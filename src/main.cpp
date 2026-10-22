@@ -1,8 +1,8 @@
-// groundcode – Bodenstation (Arduino Nano) für die Rakete "Mission Space"
+// kartonaut-ground – Bodenstation (Arduino Nano) für die Rakete "Kartonaut"
 //
 // Empfängt die Telemetrie-Zeilen des Flugcomputers über ein HC-12-Funkmodul
 // (433 MHz) und gibt sie auf der USB-Konsole aus. Heute versteht sie das
-// Beacon-Format des Test-Sketches `radio_beacon` im Repo mission_space:
+// Beacon-Format des Test-Sketches `radio_beacon` im Repo kartonaut (Ordner firmware/):
 //
 //     BEACON,<seq>,<millis>
 //

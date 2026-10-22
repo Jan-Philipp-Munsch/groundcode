@@ -1,7 +1,7 @@
-# groundcode – Bodenstation für Mission Space
+# kartonaut-ground – Bodenstation für Kartonaut
 
 Arduino Nano mit HC-12-Funkmodul (433 MHz), das Gegenstück zum Flugcomputer der
-TVC-Modellrakete [mission_space](https://github.com/Jan-Philipp-Munsch/mission_space).
+TVC-Modellrakete [kartonaut](https://github.com/Jan-Philipp-Munsch/kartonaut).
 Der Empfänger nimmt die Telemetrie-Zeilen des Flugcomputers entgegen und gibt sie auf
 der USB-Konsole aus. Heute ist das der Beacon-Test (`BEACON,<seq>,<millis>`, gesendet
 vom Sketch `radio_beacon` der Firmware) samt Zählung verlorener Pakete. Ein echtes
